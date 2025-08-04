@@ -971,7 +971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ddc5c574bf5bc42b27e1baf8973e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesRemaining: 5
   gameOver: 0
   gameTime: 0
   gameStatusText: {fileID: 1779772983}
