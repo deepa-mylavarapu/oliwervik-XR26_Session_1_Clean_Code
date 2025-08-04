@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 30f;
-    private float currentHealth;
+    public delegate void HealthChanged(float currentHealth);
+    public event HealthChanged OnHealthChanged;
 
-    public event System.Action OnPlayerDefeated;
-    public event System.Action<float> OnHealthChanged;
+    public delegate void PlayerDefeated();
+    public event PlayerDefeated OnDefeated;
+
+    [SerializeField] private float maxHealth = 100f;
+    private float currentHealth;
 
     void Start()
     {
@@ -18,9 +21,11 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
         OnHealthChanged?.Invoke(currentHealth);
+
         if (currentHealth <= 0f)
         {
-            OnPlayerDefeated?.Invoke();
+            OnDefeated?.Invoke();
         }
     }
 }
+

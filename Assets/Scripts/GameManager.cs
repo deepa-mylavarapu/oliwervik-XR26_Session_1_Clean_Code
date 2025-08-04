@@ -1,52 +1,39 @@
 using UnityEngine;
-using TMPro;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI gameStatusText;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private PlayerScore playerScore;
+    public static GameManager Instance { get; private set; }
 
-    private bool gameOver = false;
+    public bool IsGameOver { get; private set; }
 
-    void Start()
+    private void Awake()
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
-
-        gameStatusText.text = "Game Started!";
-        playerScore.OnScoreChanged += CheckWinCondition;
-    }
-
-    private void CheckWinCondition(int score)
-    {
-        if (!gameOver && score >= 30)
+        if (Instance != null && Instance != this)
         {
-            WinGame();
+            Destroy(gameObject); // Prevent duplicates
+            return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Optional: persist across scenes
     }
 
     public void GameOver()
     {
-        if (!gameOver)
-        {
-            gameOver = true;
-            gameStatusText.text = "GAME OVER!";
-            gameOverPanel.SetActive(true);
-            Invoke(nameof(RestartGame), 2f);
-        }
+        if (IsGameOver) return;
+
+        IsGameOver = true;
+        Debug.Log("Game Over triggered!");
+        // Trigger UI update or scene transition
     }
 
     public void WinGame()
     {
-        gameOver = true;
-        gameStatusText.text = "YOU WIN!";
-        Invoke(nameof(RestartGame), 2f);
-    }
+        if (IsGameOver) return;
 
-    private void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        IsGameOver = true;
+        Debug.Log("Player Wins!");
+        // Trigger win screen or animation
     }
 }
+
